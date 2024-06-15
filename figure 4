@@ -1,0 +1,26 @@
+%% Figure 4 Code
+% Define the plant transfer function
+Pd = tf([1352 40560], [1 28 1512 40560]);  % Pd = plant transfer function
+
+% Design a PID controller using MATLAB's PID tuning tool
+C = pidtune(Pd, 'PID');  % Automatically tunes a PID controller
+
+% Display the PID controller parameters
+disp('PID Controller:');
+disp(C);
+
+% Compute the open-loop transfer function L = Pd * C
+Ltf = Pd * C;
+
+% Plot the Bode plot for the open-loop system
+figure;
+bodemag(Ltf);
+title('Bode Plot of Open-Loop Transfer Function');
+grid on;
+
+% Compute and plot the closed-loop step response
+T = feedback(Ltf, 1);
+figure;
+step(T);
+title('Closed-Loop Step Response');
+grid on;
