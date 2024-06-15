@@ -1,0 +1,21 @@
+%% Figure 2 Code
+% Assumptions
+K = 1;  % Set the feedback gain
+G = tf([1352 40560],[1 28 1512 40560]) % [ 1352k (s+30) ] / [ s^3 + 28s^2 + (160 + 1352k)s + 40560k ]
+
+H1 = feedback(G, K);
+
+% Using the formula
+H2 = G / (1 + G*K);
+
+w = logspace(2,5.1,100); % Frequency range for FRD calculation
+H0 = feedback(frd(G, w), 1);
+
+% Plotting magnitudes of the closed-loop responses
+h = sigmaplot(H0, 'b', H1, 'g--', H2, 'r');
+legend('Reference H0', 'H1 = feedback(G, 1)', 'H2 = G / (1 + G)', 'Location', 'southwest');
+setoptions(h, 'YlimMode', 'manual', 'Ylim', {[-60 0]});
+title('Comparison of Closed-Loop Responses');
+xlabel('Frequency');
+ylabel('Magnitude');
+grid on;
